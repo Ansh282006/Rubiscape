@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: rubiscape-backend
+    runtime: python
+    plan: starter
+    region: singapore
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: rubiscape-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ENVIRONMENT
+        value: production
+
+databases:
+  - name: rubiscape-db
+    databaseName: rubiscape_db
+    user: rubiscape
+    plan: starter
+    region: singapore
+    postgresMajorVersion: 15
